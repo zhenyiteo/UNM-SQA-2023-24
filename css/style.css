@@ -1,0 +1,38 @@
+@mixin font-base {
+    padding: 0;
+    margin: 0;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+main{
+    padding: 500px 18px 10px;
+}
+
+.logo{
+    width: 100px;
+    padding: 3px;
+}
+
+header,section{
+    position: fixed;
+    text-align: center;
+}
+
+section{
+    top: 100px;
+}
+
+.thumb{
+    height: 200px;
+}
+
+article{
+    display: flex;
+}
+
+h4{
+    @include font-base;
+    color: black;
+    font-size: 0.7rem;
+}
