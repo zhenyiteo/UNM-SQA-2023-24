@@ -2,46 +2,62 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    justify-content: center;
+    align-items: center;
+
 }
 
-#header {
+h1{ 
     background-color: #fff;
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
     text-align: center;
 }
 
+h2{
+    padding: 2px;
+    text-align: center;
+    color: #ddd;
+}
+
 #video-container {
     display: flex;
     flex-direction: column; /* Change to column to stack the video player and list vertically */
-    align-items: center;
-    justify-content: center;
-    background-color: #f9f9f9;
-    height: 100vh; /* Set a fixed height to fill the viewport */
+    /* align-items: center;
+    justify-content: center; */
+    background-color: white;
+    /* height: 200vh; Set a fixed height to fill the viewport */
+    text-align: center;
+
 }
 
 #video-list {
     display: flex; /* Display the videos horizontally */
     align-items: center;
-    padding: 20px;
+    padding: 5px;
     background-color: #fff;
-    overflow-x: auto; /* Add horizontal scrolling for the video list */
+    overflow-x: auto; /*Add horizontal scrolling for the video list */
 }
 
 #video-list div {
+    display: inline-block; /* Display containers side by side */
+    text-align: center; /* Center align content */
+    /* margin: 10px; Add spacing between image-container elements */
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
+    /* padding: 10px; */
     cursor: pointer;
 }
 
 #video-list img {
     width: 100px;
+    height: auto;
     cursor: pointer;
-    border: 1px solid #ddd;
+    border: 5px solid whitesmoke;
     transition: transform 0.2s;
     margin-right: 10px;
+    margin-top: 0;
 }
 
 #video-list img:hover {
@@ -53,14 +69,30 @@ body {
     color: #333;
 }
 
+#video-list thumbnail {
+color: aqua;    
+}
+
+
 #video-player {
-    padding: 20px;
-    background-color: #fff;
+    padding: 5px;
+    background-color: black;
     width: 100%;
+    align-items: center;
+    height: 60vh;
+
 }
 
 iframe {
     width: 640px; /* Set the width to match YouTube player size */
     height: 360px; /* Set the height to match YouTube player size */
     border: none;
+
+}
+
+
+#gallery{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
