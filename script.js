@@ -37,5 +37,5 @@ function loadVideo(videoId, title) {
     `;
 }
 
-
+// Calling fetchYouTubeVideos() function to display initial 12 videos onto the screen
 fetchYouTubeVideos();

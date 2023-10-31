@@ -16,19 +16,24 @@
                 <input type="text" id="input-keyword" name="inputKeyword">
                 <button onclick="additionalKeywords()">ADD KEYWORD</button>
             </div>
-            <div class="form-group">
-                <br>
-                <label><b>Select keywords:</b></label>
-                <input type="checkbox" id="keyword-1" name="keyword1" value="Software Testing">
-                <label for="keyword1">Software Testing&emsp;</label>
-                <input type="checkbox" id="keyword-2" name="keyword2" value="Development Processes">
-                <label for="keyword2">Development Processes&emsp;</label>
-                <input type="checkbox" id="keyword-3" name="keyword3" value="Tutorials">
-                <label for="keyword3">Tutorials</label>
-                <input type="submit" value="FILTER">
-            </div>
         </form>
     </div>
+
+    <br>
+
+    <div id="dropdown-container" class="checkbox-dropdown-menu">
+        <span class="list">Select keyword(s) to filter...</span>
+        <ul class="keywords">
+            <li><input type="checkbox" id="keyword-1" name="first-keyword" value="K1">Testing</li>
+            <li><input type="checkbox" id="keyword-2" name="second-keyword" value="K1">Development Processes</li>
+            <li><input type="checkbox" id="keyword-3" name="third-keyword" value="K1">Tutorials</li>
+            <li><input type="checkbox" id="keyword-4" name="fourth-keyword" value="K1">Q&A</li>
+            <li><input type="checkbox" id="keyword-5" name="fifth-keyword" value="K1">Keyword 5</li>
+            <li><input type="checkbox" id="keyword-6" name="sixth-keyword" value="K1">Keyword 6</li>
+        </ul>
+    </div>
+    
+    <br>
     
     <div id="video-container">
         <div id="video-player"></div>
