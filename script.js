@@ -1,4 +1,4 @@
-const apiKey = 'AIzaSyArKELmVQhg1L9MaQ7LLmEIk_4UQCTlvks'; // Replace with your actual API key
+const apiKey = 'API_KEY'; // Replace with your actual API key
 
 // Function to fetch YouTube video data
 function fetchYouTubeVideos() {

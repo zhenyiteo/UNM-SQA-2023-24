@@ -9,6 +9,27 @@
 <body>
     <h1>Group 6 Software Quality Assurance Videos</h1>
 
+    <div class="keyword-container">
+        <form id="form-test">
+            <div class="additional-keyword">
+                <label for="inputKeyword"><b>Enter desired keyword:</b></label>
+                <input type="text" id="input-keyword" name="inputKeyword">
+                <button onclick="additionalKeywords()">ADD KEYWORD</button>
+            </div>
+            <div class="form-group">
+                <br>
+                <label><b>Select keywords:</b></label>
+                <input type="checkbox" id="keyword-1" name="keyword1" value="Software Testing">
+                <label for="keyword1">Software Testing&emsp;</label>
+                <input type="checkbox" id="keyword-2" name="keyword2" value="Development Processes">
+                <label for="keyword2">Development Processes&emsp;</label>
+                <input type="checkbox" id="keyword-3" name="keyword3" value="Tutorials">
+                <label for="keyword3">Tutorials</label>
+                <input type="submit" value="FILTER">
+            </div>
+        </form>
+    </div>
+    
     <div id="video-container">
         <div id="video-player"></div>
         <div id="video-list"></div>
