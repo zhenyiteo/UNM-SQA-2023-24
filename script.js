@@ -37,5 +37,20 @@ function loadVideo(videoId, title) {
     `;
 }
 
+// Function to access and use checkbox dropdown menu
+function accessDropdownMenu() {
+    var dropdownMenu = document.getElementById('dropdown-container');
+    dropdownMenu.getElementsByClassName('list')[0].onclick = function(evt) {
+    if (dropdownMenu.classList.contains('visible')) {
+        dropdownMenu.classList.remove('visible');
+    } else {
+        dropdownMenu.classList.add('visible');
+    }
+    }
+}
+
 // Calling fetchYouTubeVideos() function to display initial 12 videos onto the screen
 fetchYouTubeVideos();
+
+// Calling accessDropdownMenu() function to allow the use of drop down menu
+accessDropdownMenu();
