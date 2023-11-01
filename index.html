@@ -14,7 +14,7 @@
             <div class="additional-keyword">
                 <label for="inputKeyword"><b>Enter desired keyword:</b></label>
                 <input type="text" id="input-keyword" name="inputKeyword">
-                <button onclick="additionalKeywords()">ADD KEYWORD</button>
+                <input type="button" id="add" value="ADD KEYWORD">
             </div>
         </form>
     </div>
@@ -23,7 +23,7 @@
 
     <div id="dropdown-container" class="checkbox-dropdown-menu">
         <span class="list">Select keyword(s) to filter...</span>
-        <ul class="keywords">
+        <ul class="keywords" id="filters">
             <li><input type="checkbox" id="keyword-1" name="first-keyword" value="K1">Testing</li>
             <li><input type="checkbox" id="keyword-2" name="second-keyword" value="K1">Development Processes</li>
             <li><input type="checkbox" id="keyword-3" name="third-keyword" value="K1">Tutorials</li>
@@ -33,7 +33,7 @@
         </ul>
     </div>
     
-    <br><br>
+    <br><br >
     
     <div id="video-container">
         <div id="video-player"></div>

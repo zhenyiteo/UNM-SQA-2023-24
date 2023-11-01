@@ -49,8 +49,21 @@ function accessDropdownMenu() {
     }
 }
 
+// Function to allow users to add keywords to the checkbox dropdown menu list
+function addKeywords() {
+    document.getElementById("add").onclick = function() {
+        var text = document.getElementById("input-keyword").value; 
+        var li = `<li><input type="checkbox" value="${text}">${text}</li>`;
+        document.getElementById("filters").innerHTML += li
+        document.getElementById("input-keyword").value = ""; // clear the value
+      }
+}
+
 // Calling fetchYouTubeVideos() function to display initial 12 videos onto the screen
 fetchYouTubeVideos();
 
 // Calling accessDropdownMenu() function to allow the use of drop down menu
 accessDropdownMenu();
+
+// Calling addKeywords() function to allow the user to add their own keywords to filter
+addKeywords();
