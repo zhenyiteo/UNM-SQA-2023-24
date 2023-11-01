@@ -96,3 +96,47 @@ iframe {
     flex-direction: column;
     align-items: center;
 }
+
+/* CSS style for checkbox dropdown menu */
+/* Display keywords vertically */
+.checkbox-dropdown-menu {
+    display: inline-block; /* Shape of the box encasing the keywords is relative to the filter box*/
+}
+
+/* Encases the dropdown menu in a rectangle*/
+.checkbox-dropdown-menu .list {
+    position:relative; /* Size of rectangle is based on the content inside it*/
+    cursor: pointer; /* mouse pointer changes when hovered over */
+    display: inline-block;
+    padding: 5px 50px 5px 10px;
+    border: 1px solid #000000;
+}
+
+/* CSS style for downward arrow for filtering feature */
+.checkbox-dropdown-menu .list:after {
+    position: absolute;
+    content: "";
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+    padding: 5px;
+    right: 10px;
+    top: 20%;
+    -moz-transform: rotate(-135deg); /* Line 124 to 128 adjust the orientation of the arrow*/
+    -ms-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+/* Encases the keywords in a rectangular box when interacted with*/
+.checkbox-dropdown-menu ul.keywords {
+    padding: 2px;
+    display: none;
+    margin: 0;
+    border: 1px solid #000000;  
+}
+
+/* Displays the keywords*/
+.checkbox-dropdown-menu.visible .keywords {
+    display: block;
+}
