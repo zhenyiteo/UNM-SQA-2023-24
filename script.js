@@ -31,7 +31,7 @@ function fetchYouTubeVideos() {
 // Function to load and play a video
 function loadVideo(videoID, title) {
 
-    const videoPlayer = document.getElementById('video-player');
+    const videoPlayer = document.getElementById('video-title');
     // const iframeID = "youtube"
 
     videoPlayer.innerHTML = `<h2>${title}</h2>`;
@@ -45,10 +45,9 @@ function loadVideo(videoID, title) {
     // 3. This function creates an <iframe> (and YouTube player)
     //    after the API code downloads.
     var player;
-
-    player = new YT.Player('player', {
-        // height: '390',
-        // width: '640',
+    player = new YT.Player('video-player', {
+        height: '260',
+        width: '240',
         videoId: videoID,
         // playerVars: {
         //   'playsinline': 1
