@@ -1,3 +1,4 @@
+//api key
 const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug'; 
 // Function to fetch YouTube video data
 function fetchYouTubeVideos(query) {
@@ -36,6 +37,7 @@ function loadVideo(videoId, title) {
     `;
 }
 
+// function for keywords
 // Function to update the query based on selected and custom keywords
 function updateQuery() {
     const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
@@ -45,13 +47,13 @@ function updateQuery() {
     const customKeywordInput = document.getElementById('custom-keyword');
     const customKeyword = customKeywordInput.value.trim();
 
-    // Combine selected, custom, and predefined keywords
+    //combine selected, custom, and predefined keywords
     const keywords = [...selectedKeywords, ...customKeywords, customKeyword].filter(Boolean);
 
-    // Construct the query based on the keywords
+    //construct the query based on the keywords
     const query = keywords.length > 0 ? keywords.join(' ') : 'Software Quality Assurance';
 
-    // Fetch videos based on the updated query
+    //fetch videos based on the updated query
     fetchYouTubeVideos(query);
 }
 
