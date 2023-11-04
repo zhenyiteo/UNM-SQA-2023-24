@@ -1,8 +1,6 @@
-const apiKey = 'AIzaSyArKELmVQhg1L9MaQ7LLmEIk_4UQCTlvks'; // Replace with your actual API key
-
+const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug'; 
 // Function to fetch YouTube video data
-function fetchYouTubeVideos() {
-    const query = 'Software Quality Assurance';
+function fetchYouTubeVideos(query) {
     const maxResults = 12;
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}`;
@@ -10,8 +8,9 @@ function fetchYouTubeVideos() {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            // Process the data and populate your UI with video thumbnails and titles
             const videoList = document.getElementById('video-list');
+            videoList.innerHTML = ''; // Clear the existing video list
+
             data.items.forEach(item => {
                 const videoId = item.id.videoId;
                 const title = item.snippet.title;
@@ -37,5 +36,43 @@ function loadVideo(videoId, title) {
     `;
 }
 
+// Function to update the query based on selected and custom keywords
+function updateQuery() {
+    const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
+        .map(checkbox => checkbox.value);
+    const customKeywords = Array.from(document.querySelectorAll('#custom-keywords-list input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+    const customKeywordInput = document.getElementById('custom-keyword');
+    const customKeyword = customKeywordInput.value.trim();
 
-fetchYouTubeVideos();
+    // Combine selected, custom, and predefined keywords
+    const keywords = [...selectedKeywords, ...customKeywords, customKeyword].filter(Boolean);
+
+    // Construct the query based on the keywords
+    const query = keywords.length > 0 ? keywords.join(' ') : 'Software Quality Assurance';
+
+    // Fetch videos based on the updated query
+    fetchYouTubeVideos(query);
+}
+
+// Add custom keyword to the list
+document.getElementById('keyword-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const customKeywordInput = document.getElementById('custom-keyword');
+    const customKeyword = customKeywordInput.value.trim();
+
+    if (customKeyword) {
+        const customKeywordsList = document.getElementById('custom-keywords-list');
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox" value="${customKeyword}" checked> ${customKeyword}`;
+        customKeywordsList.appendChild(li);
+        customKeywordInput.value = ''; // Clear the input field
+        updateQuery(); // Update the query when a new keyword is added
+    }
+});
+
+// Handle changes in selected keywords and custom keywords
+document.getElementById('keyword-section').addEventListener('change', updateQuery);
+
+// Fetch videos when the page loads
+fetchYouTubeVideos('Software Quality Assurance');
