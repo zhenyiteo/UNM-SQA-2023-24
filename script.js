@@ -1,11 +1,18 @@
 const apiKey = 'AIzaSyArKELmVQhg1L9MaQ7LLmEIk_4UQCTlvks'; // Replace with your actual API key
 
+//checks to see if a video has already been loaded
+iframe_active = 0;
+
+
 // Function to fetch YouTube video data
 function fetchYouTubeVideos() {
     const query = 'Software Quality Assurance';
     const maxResults = 12;
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}`;
+
+    var player;
+
 
     fetch(apiUrl)
         .then(response => response.json())
@@ -36,51 +43,32 @@ function loadVideo(videoID, title) {
 
     videoPlayer.innerHTML = `<h2>${title}</h2>`;
 
-    // var tag = document.createElement('script');
-    // tag.src = "https://www.youtube.com/iframe_api";
-    
-    // var firstScriptTag = document.getElementsByTagName('script')[0];
-    // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    //if a video has been loaded, update videoID
+    if(iframe_active){
 
-    // 3. This function creates an <iframe> (and YouTube player)
-    //    after the API code downloads.
-    var player;
-    player = new YT.Player('video-player', {
-        height: '260',
-        width: '240',
-        videoId: videoID,
-        // playerVars: {
-        //   'playsinline': 1
+        player.loadVideoById(videoID);
+
+    }
+    else{
   
-        // },
-        events: {
-          'onReady': onPlayerReady,
-        }
-      });
+        //create a new youtube player 
+        player = new YT.Player('video-player', {
+            height: '260',
+            width: '240',
+            videoId: videoID,
+            events: {
+              'onReady': onPlayerReady,
+            }
+          });
+
     }
 
-    // 4. The API will call this function when the video player is ready.
-    // function onPlayerReady(event) {
-    //   event.target.playVideo();
-    // }
-
-    // <iframe id="${iframeID}" width="640" height="360" src="https://www.youtube.com/embed/${videoID}" frameborder="0" allowfullscreen></iframe>
-
-    //Initialising YT player API
-    // let player;
-    // player = new YT.Player(iframeID, {
-    //     videoId: `${vidI}`,
-    //     events: {
-    //         'onReady' : onPlayerReady,
-    //     },
-    // });
-
+    }
 
 function onPlayerReady(event) {
-    // Add a function to retrieve the current time
-    const player = event.target;
-    const currentTime = player.getCurrentTime();
-    console.log('Current Time: ' + currentTime);
+
+    iframe_active = 1; //indicate that a video has been loaded
+
 }
 
 
@@ -101,8 +89,8 @@ addNote.addEventListener("click", () => {
 
     popupNotes.classList.add("show");
 
-});
 
+});
 
 closeContent.addEventListener("click", () => {
 
@@ -121,7 +109,7 @@ function showNotes(){
 
         let liTag = `<li class="note">
                         <div class="timestamp">
-                            <span>[12:45]</span>
+                            <span>[${note.time}]</span>
                         </div>
                         <div class="content">
                             <span>${note.description}</span>
@@ -143,14 +131,18 @@ saveBtn.addEventListener("click", e => {
     if(noteContent){
         //take time video 
 
+        var currentTime = player.getCurrentTime();
+        console.log("TIME NOTE WAS ADDED:" + secondsToMinutesAndSeconds(currentTime));
+
         let noteInfo ={
-
-            description: noteContent
-
+            description: noteContent,
+            time: secondsToMinutesAndSeconds(currentTime)
         }
 
         notes.push(noteInfo); //add a new note
 
+      
+    
         localStorage.setItem("notes", JSON.stringify(notes));
         closeContent.click();
         showNotes();
@@ -159,4 +151,12 @@ saveBtn.addEventListener("click", e => {
     }
 
 });
+
+function secondsToMinutesAndSeconds(seconds) {
+
+    var minutes = Math.floor(seconds / 60);
+    var remSec = seconds % 60;
+    return minutes + ":" + Math.round(remSec);
+  }
+  
 
