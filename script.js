@@ -41,23 +41,24 @@ function loadVideo(videoId, title) {
 // Function to update the query based on selected and custom keywords
 function updateQuery() {
     const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
-        .map(checkbox => checkbox.value);
+        .map(checkbox => checkbox.value); //select all the checkboxes that are currently checked on the page, then convert to array
     const customKeywords = Array.from(document.querySelectorAll('#custom-keywords-list input[type="checkbox"]:checked'))
         .map(checkbox => checkbox.value);
     const customKeywordInput = document.getElementById('custom-keyword');
-    const customKeyword = customKeywordInput.value.trim();
+    const customKeyword = customKeywordInput.value.trim(); //trim any whitespace
 
-    //combine selected, custom, and predefined keywords
+    //combine selected, custom and predefined keywords into single array called "keywords"
+    //.filter(Boolean) to remove any empty string from the array
     const keywords = [...selectedKeywords, ...customKeywords, customKeyword].filter(Boolean);
 
-    //construct the query based on the keywords
+    //if no keywords selected, default videos = software quality assurance
     const query = keywords.length > 0 ? keywords.join(' ') : 'Software Quality Assurance';
 
     //fetch videos based on the updated query
     fetchYouTubeVideos(query);
 }
 
-// Add custom keyword to the list
+// Function for adding custom keyword to the list
 document.getElementById('keyword-form').addEventListener('submit', function (e) {
     e.preventDefault();
     const customKeywordInput = document.getElementById('custom-keyword');
@@ -66,10 +67,10 @@ document.getElementById('keyword-form').addEventListener('submit', function (e) 
     if (customKeyword) {
         const customKeywordsList = document.getElementById('custom-keywords-list');
         const li = document.createElement('li');
-        li.innerHTML = `<input type="checkbox" value="${customKeyword}" checked> ${customKeyword}`;
-        customKeywordsList.appendChild(li);
+        li.innerHTML = `<input type="checkbox" value="${customKeyword}" checked> ${customKeyword}`; //html list and checkbox checked
+        customKeywordsList.appendChild(li); //append item to list
         customKeywordInput.value = ''; // Clear the input field
-        updateQuery(); // Update the query when a new keyword is added
+        updateQuery(); // update the query when a new keyword is added
     }
 });
 
