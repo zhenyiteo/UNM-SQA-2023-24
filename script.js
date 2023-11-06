@@ -37,8 +37,8 @@ function loadVideo(videoId, title) {
     `;
 }
 
-// function for keywords
-// Function to update the query based on selected and custom keywords
+// function for keywords..
+// Function to update the query based on selected and custom keywords.
 function updateQuery() {
     const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
         .map(checkbox => checkbox.value); //select all the checkboxes that are currently checked on the page, then convert to array
@@ -47,7 +47,7 @@ function updateQuery() {
     const customKeywordInput = document.getElementById('custom-keyword');
     const customKeyword = customKeywordInput.value.trim(); //trim any whitespace
 
-    //combine selected, custom and predefined keywords into single array called "keywords"
+    //combine selected, custom and predefined keywords into single array
     //.filter(Boolean) to remove any empty string from the array
     const keywords = [...selectedKeywords, ...customKeywords, customKeyword].filter(Boolean);
 
