@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Software Quality Assurance Videos</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script src="https://www.youtube.com/iframe_api"> </script>
 </head>
 <body>
     <h1>Group 6 Software Quality Assurance Videos</h1>
@@ -15,9 +17,7 @@
             <label for="keywords"><b>Enter Desired Keywords:</b></label> 
             <input type="text" id="custom-keyword" placeholder="Enter custom keyword">
             <button type="submit">Add Keyword</button> <br>
-            
-            
-            
+           
         </form>
         <label for="custom-keywords-list">Select keyword(s) to filter:</label> <br>
         <ul>
@@ -29,17 +29,46 @@
         <ul id="custom-keywords-list"></ul> <!-- Add this element for custom keywords -->
         
     </div>
-
-    
-
-    <div id="video-container">
-        <div id="video-player"></div>
+    <div id="video-title"></div>
+    <div id="video-container"> 
+        <div id="video-area">
+            <!-- <div id="video-player"></div> -->
+            <div id="video-player"></div>
+            <div id="video-notes">
+                <div class="popup-notes">
+                    <div class="popup">
+                        <div class="content">
+                            <header>
+                                <p>NEW NOTE</p>
+                                <i class="uil uil-times"></i>
+                            </header>
+                            <form action="#">
+                                <div class="text">
+                                    <textarea cols="50" rows="20"></textarea>
+                                </div>
+                            <button>Save Note</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrap">
+                    <li class ="add-notes"> 
+                        <p>NEW NOTE</p>
+                    </li>
+                    <!-- <li class="note">
+                        <div class="timestamp">
+                            <span>[12:45]</span>
+                        </div>
+                        <div class="content">
+                            <span>these are some notes. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</span>
+                        </div>
+                    </li> -->
+                </div>
+                
+            </div>
+        </div>
         <div id="video-list"></div>
     </div>
-
-    
-    
-
     <script src="script.js"></script>
 </body>
 </html>

@@ -4,7 +4,6 @@ body {
     padding: 0;
     justify-content: center;
     align-items: center;
-
 }
 
 h1{ 
@@ -28,14 +27,13 @@ h2{
     background-color: white;
     /* height: 200vh; Set a fixed height to fill the viewport */
     text-align: center;
-
 }
 
 #video-list {
     display: flex; /* Display the videos horizontally */
     align-items: center;
     padding: 5px;
-    background-color: #fff;
+    /* background-color: #fff; */
     overflow-x: auto; /*Add horizontal scrolling for the video list */
 }
 
@@ -74,20 +72,36 @@ color: aqua;
 }
 
 
-#video-player {
-    padding: 5px;
-    background-color: black;
-    width: 100%;
-    align-items: center;
-    height: 60vh;
+/* Contains the video and notes */
+#video-containter {
 
+    width: 100%;
 }
+
+#video-player {
+    /* padding: 5px; */
+    background-color: greenyellow;
+    width: 50%;
+    float: left;
+    height: 60vh;
+}
+
+/* to display notes */
+#video-notes {
+
+    width: 50%;
+    float: right;
+    background-color: rgb(255, 255, 212);
+    height: 60vh;
+    overflow: auto; /* Use 'scroll' for a constant scrollbar */
+    position: relative;
+}
+
 
 iframe {
     width: 640px; /* Set the width to match YouTube player size */
     height: 360px; /* Set the height to match YouTube player size */
     border: none;
-
 }
 
 
@@ -97,6 +111,111 @@ iframe {
     align-items: center;
 }
 
+/*for notes css*/
+
+.wrap{
+
+    margin: 50px;
+    /* display: grid; */
+    /* gap: 15px; */
+    grid-template-columns: repeat(auto-fill, 265px);
+}
+
+.add-notes{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrap li{
+
+    list-style: none;
+    /* background: yellow; */
+    border-radius: 10px;
+    padding: 30px 20px 20px;
+
+}
+
+.note .content{ 
+
+    display: inline-block;
+    /* padding-top: 20px; */
+    padding-bottom: 20px;
+    /* float: left; */
+
+}
+
+.note .timestamp{
+    /* float: left; */
+    margin-bottom: 20px;
+}
+
+/* the grey area */
+.popup-notes{
+
+    position: absolute; /* Position the inner box relative to the container */
+    background:rgba(0, 0, 0, 0.4);
+    width: 100%; /* Set the width of the inner box */
+    height: 100%;
+
+}
+
+.popup-notes .popup{
+
+    position: absolute;
+    background: rgb(255, 217, 79);
+    top: 50%;
+    left: 50%;
+    /* z-index: 2;
+    max-width: 300px; */
+    transform: translate(-50%, -50%); 
+    padding: 20px 20px 20px;
+    border-radius: 5px;
+    
+}
+
+/* when hidden */
+.popup-notes, .popup-notes .popup{
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* when user clicks on new note */
+.popup-notes.show, .popup-notes.show .popup{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.popup .content{
+    border-radius: 5px;
+}
+
+.popup .content header{
+    border-bottom: 1px;
+}
+
+.content header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* the 'x' button */
+.content header i{
+    cursor: pointer;
+}
+
+.content form button{
+    margin-top: 3%;
+}
+
+.highlight{
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+  
 /*for keyword css*/
 
 #keyword-section {
