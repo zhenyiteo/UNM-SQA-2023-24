@@ -111,8 +111,7 @@ iframe {
     align-items: center;
 }
 
-
-/* css for notes section */
+/*for notes css*/
 
 .wrap{
 
@@ -215,4 +214,34 @@ iframe {
     background-color: red;
     color: white;
     font-weight: bold;
+}
+  
+/*for keyword css*/
+
+#keyword-section {
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Style checkboxes */
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Style the custom keyword input and search button */
+#custom-keyword {
+    padding: 5px;
+}
+
+/* Style the search button */
+button[type="submit"] {
+    padding: 5px 10px;
+    background-color: #0074d9;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
 }

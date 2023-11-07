@@ -9,10 +9,27 @@
     <script src="https://www.youtube.com/iframe_api"> </script>
 </head>
 <body>
-
-    <h1>Group 6 Software Quality Assurance Videos TEST</h1>
+    <h1>Group 6 Software Quality Assurance Videos</h1>
+    
+    <div id="keyword-section">
+        <form id="keyword-form">
+            
+            <label for="keywords"><b>Enter Desired Keywords:</b></label> 
+            <input type="text" id="custom-keyword" placeholder="Enter custom keyword">
+            <button type="submit">Add Keyword</button> <br>
+           
+        </form>
+        <label for="custom-keywords-list">Select keyword(s) to filter:</label> <br>
+        <ul>
+        <li><input type="checkbox" name="keyword" value="Software Quality Assurance"> Software Quality Assurance </li>
+        <li><input type="checkbox" name="keyword" value="Agile"> Agile </li>
+        <li><input type="checkbox" name="keyword" value="Development Process"> Development Process </li>
+        <li><input type="checkbox" name="keyword" value="Scrum"> Scrum </li>
+        <li><input type="checkbox" name="keyword" value="UAT Testing"> UAT Testing </li> </ul>
+        <ul id="custom-keywords-list"></ul> <!-- Add this element for custom keywords -->
+        
+    </div>
     <div id="video-title"></div>
-
     <div id="video-container"> 
         <div id="video-area">
             <!-- <div id="video-player"></div> -->

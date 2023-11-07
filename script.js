@@ -1,12 +1,12 @@
-const apiKey = 'AIzaSyArKELmVQhg1L9MaQ7LLmEIk_4UQCTlvks'; // Replace with your actual API key
+
+//api key
+const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug';
 
 //checks to see if a video has already been loaded
 iframe_active = 0;
 
-
 // Function to fetch YouTube video data
-function fetchYouTubeVideos() {
-    const query = 'Software Quality Assurance';
+function fetchYouTubeVideos(query) {
     const maxResults = 12;
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}`;
@@ -16,8 +16,9 @@ function fetchYouTubeVideos() {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            // Process the data and populate your UI with video thumbnails and titles
             const videoList = document.getElementById('video-list');
+            videoList.innerHTML = ''; // Clear the existing video list
+
             data.items.forEach(item => {
 
                 const videoID = item.id.videoId;
@@ -78,15 +79,58 @@ function onPlayerReady(event) {
 
 }
 
-//function in progress
+//FUNCTION IN PROGRESS
 function onPlayerState(event) {
     if (event.data == YT.PlayerState.PLAYING) {
       trackVideoTime();
     }
   }
 
+//*****KEYWORD SEARCH FUNCTIONS******
 
-fetchYouTubeVideos();
+// Function to update the query based on selected and custom keywords
+function updateQuery() {
+    const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
+        .map(checkbox => checkbox.value); //select all the checkboxes that are currently checked on the page, then convert to array
+    const customKeywords = Array.from(document.querySelectorAll('#custom-keywords-list input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+    const customKeywordInput = document.getElementById('custom-keyword');
+    const customKeyword = customKeywordInput.value.trim(); //trim any whitespace
+
+    //combine selected, custom and predefined keywords into single array called "keywords"
+    //.filter(Boolean) to remove any empty string from the array
+    const keywords = [...selectedKeywords, ...customKeywords, customKeyword].filter(Boolean);
+
+    //if no keywords selected, default videos = software quality assurance
+    const query = keywords.length > 0 ? keywords.join(' ') : 'Software Quality Assurance';
+
+    //fetch videos based on the updated query
+    fetchYouTubeVideos(query);
+}
+
+// Function for adding custom keyword to the list
+document.getElementById('keyword-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const customKeywordInput = document.getElementById('custom-keyword');
+    const customKeyword = customKeywordInput.value.trim();
+
+    if (customKeyword) {
+        const customKeywordsList = document.getElementById('custom-keywords-list');
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox" value="${customKeyword}" checked> ${customKeyword}`; //html list and checkbox checked
+        customKeywordsList.appendChild(li); //append item to list
+        customKeywordInput.value = ''; // Clear the input field
+        updateQuery(); // update the query when a new keyword is added
+    }
+});
+
+// Handle changes in selected keywords and custom keywords
+document.getElementById('keyword-section').addEventListener('change', updateQuery);
+
+// Fetch videos when the page loads
+fetchYouTubeVideos('Software Quality Assurance');
+
+// fetchYouTubeVideos();
 
 //*****NOTES FUNCTIONS******
 
@@ -225,4 +269,3 @@ function trackVideoTime() {
     }, 100)
 
 }
-
