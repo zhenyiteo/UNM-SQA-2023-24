@@ -11,8 +11,7 @@ function fetchYouTubeVideos() {
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}`;
 
-    var player;
-
+    // var player;
 
     fetch(apiUrl)
         .then(response => response.json())
@@ -20,9 +19,12 @@ function fetchYouTubeVideos() {
             // Process the data and populate your UI with video thumbnails and titles
             const videoList = document.getElementById('video-list');
             data.items.forEach(item => {
+
                 const videoID = item.id.videoId;
                 const title = item.snippet.title;
                 const thumbnailUrl = item.snippet.thumbnails.default.url;
+
+                // console.log("video id:" + videoID + "video title:" + title);
 
                 const videoThumbnail = document.createElement('div');
                 videoThumbnail.innerHTML = `
@@ -38,16 +40,17 @@ function fetchYouTubeVideos() {
 // Function to load and play a video
 function loadVideo(videoID, title) {
 
+
     const videoPlayer = document.getElementById('video-title');
-    // const iframeID = "youtube"
 
     videoPlayer.innerHTML = `<h2>${title}</h2>`;
 
     //if a video has been loaded, update videoID
     if(iframe_active){
 
+        clearNotes();
         player.loadVideoById(videoID);
-
+        showNotes(videoID);
     }
     else{
   
@@ -58,10 +61,14 @@ function loadVideo(videoID, title) {
             videoId: videoID,
             events: {
               'onReady': onPlayerReady,
+              'onStateChange': onPlayerState
+
             }
           });
 
     }
+
+    showNotes(videoID);
 
     }
 
@@ -71,10 +78,17 @@ function onPlayerReady(event) {
 
 }
 
+//function in progress
+function onPlayerState(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+      trackVideoTime();
+    }
+  }
+
 
 fetchYouTubeVideos();
 
-//****NOTES FUNCTIONS******
+//*****NOTES FUNCTIONS******
 
 // Function to add notes
 const addNote = document.querySelector(".add-notes"), 
@@ -83,12 +97,14 @@ closeContent = popupNotes.querySelector("header i");
 saveBtn  = popupNotes.querySelector("button")
 contentTag = popupNotes.querySelector("textarea");
 
+//saving notes
 const notes = JSON.parse(localStorage.getItem("notes") || "[]");
 
+
+//showing and removing add note 
 addNote.addEventListener("click", () => {
 
     popupNotes.classList.add("show");
-
 
 });
 
@@ -100,13 +116,17 @@ closeContent.addEventListener("click", () => {
 });
 
 
-function showNotes(){
+function showNotes(v){
 
-    //need to create, if youtbe id matches note
+    //clear exisiting notes
+    clearNotes();
 
-    //if youtube note == timestamp , 
     notes.forEach((note) => {
 
+        //if youtube note == youtube video id , display note
+        if(note.id == v)
+        {
+            
         let liTag = `<li class="note">
                         <div class="timestamp">
                             <span>[${note.time}]</span>
@@ -114,49 +134,95 @@ function showNotes(){
                         <div class="content">
                             <span>${note.description}</span>
                         </div>
-                    </li>`;
+                     </li>`;
 
          addNote.insertAdjacentHTML("afterend", liTag);
+
+        }
+
     });
 }
 
-showNotes();
 
-
+//save a note if there is content
 saveBtn.addEventListener("click", e => {
 
     e.preventDefault();
     let noteContent = contentTag.value;
     
     if(noteContent){
-        //take time video 
 
+        //take time video 
         var currentTime = player.getCurrentTime();
+        var noteID = player.getVideoData().video_id;
         console.log("TIME NOTE WAS ADDED:" + secondsToMinutesAndSeconds(currentTime));
 
         let noteInfo ={
             description: noteContent,
-            time: secondsToMinutesAndSeconds(currentTime)
+            time: secondsToMinutesAndSeconds(currentTime),
+            id: noteID
         }
 
         notes.push(noteInfo); //add a new note
-
-      
     
         localStorage.setItem("notes", JSON.stringify(notes));
         closeContent.click();
-        showNotes();
-
+        clearNotes();
+        showNotes(noteID);
 
     }
-
 });
 
+//function to display note timestamp in an appropriate format
 function secondsToMinutesAndSeconds(seconds) {
 
     var minutes = Math.floor(seconds / 60);
     var remSec = seconds % 60;
     return minutes + ":" + Math.round(remSec);
+
+    //TODO:  make a '0' infront if the remaining seconds is <10
+
   }
   
+  //function for removing all existing notes
+  function clearNotes() {
+
+        const noteList = document.querySelectorAll('.note');
+
+        noteList.forEach((noteElement) => {
+            noteElement.remove(); // Remove each note individually
+          });
+
+  }
+
+//IN PROGRESS
+function trackVideoTime() {
+
+    var noteToStyle = document.getElementById('timestamp');
+    var Child = noteToStyle.children[0]; // Index starts at 0
+
+    var currentTime = player.getCurrentTime();
+
+    setInterval(function(){
+
+
+    notes.forEach((note) => {
+
+
+        if(note.time == currentTime){
+    
+            Child.classList.add("highlight");
+    
+        }
+        else{
+    
+            Child.classList.remove("highlight"); 
+        }
+    
+        
+        });
+
+    }, 100)
+
+}
 

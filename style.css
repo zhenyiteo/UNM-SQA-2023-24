@@ -117,8 +117,8 @@ iframe {
 .wrap{
 
     margin: 50px;
-    display: grid;
-    gap: 15px;
+    /* display: grid; */
+    /* gap: 15px; */
     grid-template-columns: repeat(auto-fill, 265px);
 }
 
@@ -132,15 +132,24 @@ iframe {
 .wrap li{
 
     list-style: none;
-    background: yellow;
+    /* background: yellow; */
     border-radius: 10px;
     padding: 30px 20px 20px;
 
 }
 
-.timestamp{
+.note .content{ 
 
-    padding-bottom: 10px;
+    display: inline-block;
+    /* padding-top: 20px; */
+    padding-bottom: 20px;
+    /* float: left; */
+
+}
+
+.note .timestamp{
+    /* float: left; */
+    margin-bottom: 20px;
 }
 
 /* the grey area */
@@ -200,4 +209,10 @@ iframe {
 
 .content form button{
     margin-top: 3%;
+}
+
+.highlight{
+    background-color: red;
+    color: white;
+    font-weight: bold;
 }
