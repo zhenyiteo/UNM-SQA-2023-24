@@ -6,6 +6,8 @@
     <title>Software Quality Assurance Videos</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <!--for modal style sheet-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <script src="https://www.youtube.com/iframe_api"> </script>
 </head>
 <body>
@@ -67,6 +69,22 @@
                 
             </div>
         </div>
+        <button id="shareButton" onclick="shareVideo()">Share This Video</button>
+
+    <div id="shareModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modalText">
+            Shareable Link:<br>
+            <input type="text" value="" id="shareLink" readonly>
+            <button onclick="copyToClipboard()">Copy</button>
+            <br>
+            Share on:
+            <a href="#" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="#" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </p>
+    </div>
+</div>
         <div id="video-list"></div>
     </div>
     <script src="script.js"></script>

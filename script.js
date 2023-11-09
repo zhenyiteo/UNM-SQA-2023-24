@@ -1,6 +1,6 @@
 
-//api key
-const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug';
+//api key here
+const apiKey = 'AIzaSyARBhDYIuCIFzuhotN3xXH4YV1s8QchKv8';
 
 //checks to see if a video has already been loaded
 iframe_active = 0;
@@ -269,3 +269,83 @@ function trackVideoTime() {
     }, 100)
 
 }
+
+// Function to generate a shareable link
+function shareVideo() {
+    const videoID = player.getVideoData().video_id; // Get the current video ID
+    const notesForVideo = getNotesForVideo(videoID); // Get notes for the current video ID
+
+    // Pause the video
+    player.pauseVideo();
+
+    // Create a shareable link with video ID and notes
+    const shareableLink = `http://127.0.0.1:5500/UNM-SQA-2023-24/index.html?v=${videoID}&notes=${encodeURIComponent(JSON.stringify(notesForVideo))}`;
+
+    // Display the modal
+    const modal = document.getElementById('shareModal');
+    const modalText = document.getElementById('modalText');
+
+    // Update modal content with icons and links and css
+    modalText.innerHTML = `
+                <h3>Share Link: </h3>
+                <div style="word-wrap: break-word;">
+                    ${shareableLink}
+                </div>
+                <button onclick="copyToClipboard('${shareableLink}')" style="margin-top: 5px;">Copy Link</button>
+            </div>
+            <div style="display: flex; cursor: pointer;margin-top: 5px;justify-content: center">
+            <h3>Share On: </h3>
+            <i class="fab fa-facebook fa-3x" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareableLink)}', '_blank')"></i>
+            <i class="fab fa-whatsapp fa-3x" onclick="window.open('https://api.whatsapp.com/send?text=${encodeURIComponent(shareableLink)}', '_blank')"></i>
+            <i class="fas fa-envelope-open fa-3x" onclick="window.open('mailto:?body=${encodeURIComponent(shareableLink)}', '_blank')"></i>
+            </div>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = 'block';
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Link copied to clipboard!');
+    }).catch((err) => {
+        console.error('Unable to copy to clipboard', err);
+    });
+}
+
+function closeModal() {
+    const modal = document.getElementById('shareModal');
+    modal.style.display = 'none';
+}
+
+
+
+
+
+
+// Function to get notes for a specific video ID
+function getNotesForVideo(videoID) {
+    return notes.filter(note => note.id === videoID);
+}
+
+// Function to get video ID and notes from the URL
+function getVideoAndNotesFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoID = urlParams.get('v');
+    const notes = urlParams.get('notes');
+
+    // Use videoID and notes as needed
+    console.log('Video ID:', videoID);
+    console.log('Notes:', decodeURIComponent(notes));
+
+    // Load the video and show notes based on the parameters
+    if (videoID) {
+        loadVideo(videoID, "Video Title"); // You might want to fetch the actual video title here
+        showNotes(videoID);
+    }
+}
+
+
+// Call the function when the page loads
+window.onload = getVideoAndNotesFromURL;
