@@ -92,7 +92,7 @@ function onPlayerState(event) {
 function updateQuery() {
     const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
         .map(checkbox => checkbox.value); //select all the checkboxes that are currently checked on the page, then convert to array
-    const customKeywords = Array.from(document.querySelectorAll('#custom-keywords-list input[type="checkbox"]:checked'))
+    const customKeywords = Array.from(document.querySelectorAll('#checkbox-list input[type="checkbox"]:checked'))
         .map(checkbox => checkbox.value);
     const customKeywordInput = document.getElementById('custom-keyword');
     const customKeyword = customKeywordInput.value.trim(); //trim any whitespace
@@ -115,8 +115,9 @@ document.getElementById('keyword-form').addEventListener('submit', function (e) 
     const customKeyword = customKeywordInput.value.trim();
 
     if (customKeyword) {
-        const customKeywordsList = document.getElementById('custom-keywords-list');
+        const customKeywordsList = document.getElementById('checkbox-list');
         const li = document.createElement('li');
+        li.classList.add("checkbox-item")
         li.innerHTML = `<input type="checkbox" value="${customKeyword}" checked> ${customKeyword}`; //html list and checkbox checked
         customKeywordsList.appendChild(li); //append item to list
         customKeywordInput.value = ''; // Clear the input field
@@ -262,7 +263,6 @@ function trackVideoTime() {
     
             Child.classList.remove("highlight"); 
         }
-    
         
         });
 
@@ -318,10 +318,6 @@ function closeModal() {
     const modal = document.getElementById('shareModal');
     modal.style.display = 'none';
 }
-
-
-
-
 
 
 // Function to get notes for a specific video ID

@@ -8,7 +8,7 @@ body {
 
 h1{ 
     background-color: #fff;
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1); */
     padding: 10px;
     text-align: center;
 }
@@ -80,7 +80,7 @@ color: aqua;
 
 #video-player {
     /* padding: 5px; */
-    background-color: greenyellow;
+    background-color: black;
     width: 50%;
     float: left;
     height: 60vh;
@@ -224,6 +224,37 @@ iframe {
 }
 
 /* Style checkboxes */
+
+
+.checkbox-item{
+
+    padding-right: 30px;
+
+}
+
+#checkbox-list{
+    list-style: none; /* Remove default list styles */
+    display: flex;
+    border: 20px;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Enable horizontal scrolling */
+
+}
+
+.filtering-section{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    /* overflow-x: auto; */
+}
+
+#keyword-form{
+    text-align: center;
+    padding: 15px;
+
+}
+
 input[type="checkbox"] {
     margin-right: 5px;
 }
@@ -231,6 +262,12 @@ input[type="checkbox"] {
 /* Style the custom keyword input and search button */
 #custom-keyword {
     padding: 5px;
+}
+
+#custom-keywords-list{
+    list-style: none;
+    display: flex;
+
 }
 
 /* Style the search button */
