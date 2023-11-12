@@ -32,6 +32,7 @@ function fetchYouTubeVideos(query) {
                     <img src="${thumbnailUrl}" alt="${title}" onclick="loadVideo('${videoID}', '${title}')">
                     <p>${title}</p>
                 `;
+                videoThumbnail.classList.add("video-box")
                 videoList.appendChild(videoThumbnail);
             });
         })
@@ -40,7 +41,6 @@ function fetchYouTubeVideos(query) {
 
 // Function to load and play a video
 function loadVideo(videoID, title) {
-
 
     const videoPlayer = document.getElementById('video-title');
 
