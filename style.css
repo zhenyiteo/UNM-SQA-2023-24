@@ -162,16 +162,23 @@ iframe {
 
 }
 
-.note .content{ 
+.note .content, .animate .content{ 
 
     display: inline-block;
     padding-bottom: 20px;
 
 }
 
-.note .timestamp{
+.note .timestamp, .animate .content{
     /* float: left; */
     margin-bottom: 20px;
+}
+
+.animate{
+
+    border-style: dotted;
+
+
 }
 
 /* the grey area */

@@ -62,8 +62,6 @@ function loadVideo(videoID, title) {
             videoId: videoID,
             events: {
               'onReady': onPlayerReady,
-              'onStateChange': onPlayerState
-
             }
           });
 
@@ -78,13 +76,6 @@ function onPlayerReady(event) {
     iframe_active = 1; //indicate that a video has been loaded
 
 }
-
-//FUNCTION IN PROGRESS
-function onPlayerState(event) {
-    if (event.data == YT.PlayerState.PLAYING) {
-      trackVideoTime();
-    }
-  }
 
 //*****KEYWORD SEARCH FUNCTIONS******
 
@@ -174,7 +165,7 @@ function showNotes(v){
             
         let liTag = `<li class="note">
                         <div class="timestamp">
-                            <span>[${note.time}]</span>
+                            <span>${note.time}</span>
                         </div>
                         <div class="content">
                             <span>${note.description}</span>
@@ -205,6 +196,7 @@ saveBtn.addEventListener("click", e => {
         let noteInfo ={
             description: noteContent,
             time: secondsToMinutesAndSeconds(currentTime),
+            // time_css: currentTime,
             id: noteID
         }
 
@@ -223,7 +215,7 @@ function secondsToMinutesAndSeconds(seconds) {
 
     var minutes = Math.floor(seconds / 60);
     var remSec = seconds % 60;
-    return minutes + ":" + Math.round(remSec);
+    return "["+ minutes + ":" + Math.round(remSec)+"]";
 
     //TODO:  make a '0' infront if the remaining seconds is <10
 
@@ -241,34 +233,49 @@ function secondsToMinutesAndSeconds(seconds) {
   }
 
 //IN PROGRESS
+
 function trackVideoTime() {
 
-    var noteToStyle = document.getElementById('timestamp');
-    var Child = noteToStyle.children[0]; // Index starts at 0
+    var noteElements = document.querySelectorAll('.note');
+    var CurrentTime = player.getCurrentTime();
 
-    var currentTime = player.getCurrentTime();
+    // Loop through the selected elements and apply setInterval to each one
+    noteElements.forEach(function (noteElement) {
+        // Set interval for each note element
 
-    setInterval(function(){
+        const timestampSpan = noteElement.querySelector('.timestamp span');
+        const noteTime = timestampSpan.textContent.trim();
 
+        console.log('INSIDE',  noteTime); 
+        console.log('INSIDE',  secondsToMinutesAndSeconds(CurrentTime));   
+  
 
-    notes.forEach((note) => {
+        if(noteTime == secondsToMinutesAndSeconds(CurrentTime))
+        {
+            // const noteClass = noteElement.querySelector('.note');
 
+            // timestampSpan.classList.remove("note");
+            noteElement.classList.add("animate");
+            console.log('INSIDE INSDDDIIEI',  noteTime); 
 
-        if(note.time == currentTime){
-    
-            Child.classList.add("highlight");
-    
         }
-        else{
-    
-            Child.classList.remove("highlight"); 
+        else if(noteTime != secondsToMinutesAndSeconds(CurrentTime))
+        {
+            noteElement.classList.remove("animate");
         }
-        
-        });
 
-    }, 100)
+    });
 
 }
+
+    function logMessage() {
+
+        console.log("Executing this message every 2 seconds");
+        trackVideoTime();
+    }
+    
+    // Set up the interval (every 2000 milliseconds or 2 seconds)
+    var intervalID = setInterval(logMessage, 1000);
 
 // Function to generate a shareable link
 function shareVideo() {
