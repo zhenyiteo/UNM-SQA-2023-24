@@ -32,6 +32,7 @@ function fetchYouTubeVideos(query) {
                     <img src="${thumbnailUrl}" alt="${title}" onclick="loadVideo('${videoID}', '${title}')">
                     <p>${title}</p>
                 `;
+                videoThumbnail.classList.add("video-box")
                 videoList.appendChild(videoThumbnail);
             });
         })
@@ -40,7 +41,6 @@ function fetchYouTubeVideos(query) {
 
 // Function to load and play a video
 function loadVideo(videoID, title) {
-
 
     const videoPlayer = document.getElementById('video-title');
 
@@ -62,8 +62,6 @@ function loadVideo(videoID, title) {
             videoId: videoID,
             events: {
               'onReady': onPlayerReady,
-              'onStateChange': onPlayerState
-
             }
           });
 
@@ -79,20 +77,13 @@ function onPlayerReady(event) {
 
 }
 
-//FUNCTION IN PROGRESS
-function onPlayerState(event) {
-    if (event.data == YT.PlayerState.PLAYING) {
-      trackVideoTime();
-    }
-  }
-
 //*****KEYWORD SEARCH FUNCTIONS******
 
 // Function to update the query based on selected and custom keywords
 function updateQuery() {
     const selectedKeywords = Array.from(document.querySelectorAll('input[name="keyword"]:checked'))
         .map(checkbox => checkbox.value); //select all the checkboxes that are currently checked on the page, then convert to array
-    const customKeywords = Array.from(document.querySelectorAll('#custom-keywords-list input[type="checkbox"]:checked'))
+    const customKeywords = Array.from(document.querySelectorAll('#checkbox-list input[type="checkbox"]:checked'))
         .map(checkbox => checkbox.value);
     const customKeywordInput = document.getElementById('custom-keyword');
     const customKeyword = customKeywordInput.value.trim(); //trim any whitespace
@@ -115,8 +106,9 @@ document.getElementById('keyword-form').addEventListener('submit', function (e) 
     const customKeyword = customKeywordInput.value.trim();
 
     if (customKeyword) {
-        const customKeywordsList = document.getElementById('custom-keywords-list');
+        const customKeywordsList = document.getElementById('checkbox-list');
         const li = document.createElement('li');
+        li.classList.add("checkbox-item")
         li.innerHTML = `<input type="checkbox" value="${customKeyword}" checked> ${customKeyword}`; //html list and checkbox checked
         customKeywordsList.appendChild(li); //append item to list
         customKeywordInput.value = ''; // Clear the input field
@@ -173,7 +165,7 @@ function showNotes(v){
             
         let liTag = `<li class="note">
                         <div class="timestamp">
-                            <span>[${note.time}]</span>
+                            <span>${note.time}</span>
                         </div>
                         <div class="content">
                             <span>${note.description}</span>
@@ -204,6 +196,7 @@ saveBtn.addEventListener("click", e => {
         let noteInfo ={
             description: noteContent,
             time: secondsToMinutesAndSeconds(currentTime),
+            // time_css: currentTime,
             id: noteID
         }
 
@@ -222,7 +215,7 @@ function secondsToMinutesAndSeconds(seconds) {
 
     var minutes = Math.floor(seconds / 60);
     var remSec = seconds % 60;
-    return minutes + ":" + Math.round(remSec);
+    return "["+ minutes + ":" + Math.round(remSec)+"]";
 
     //TODO:  make a '0' infront if the remaining seconds is <10
 
@@ -240,35 +233,49 @@ function secondsToMinutesAndSeconds(seconds) {
   }
 
 //IN PROGRESS
+
 function trackVideoTime() {
 
-    var noteToStyle = document.getElementById('timestamp');
-    var Child = noteToStyle.children[0]; // Index starts at 0
+    var noteElements = document.querySelectorAll('.note');
+    var CurrentTime = player.getCurrentTime();
 
-    var currentTime = player.getCurrentTime();
+    // Loop through the selected elements and apply setInterval to each one
+    noteElements.forEach(function (noteElement) {
+        // Set interval for each note element
 
-    setInterval(function(){
+        const timestampSpan = noteElement.querySelector('.timestamp span');
+        const noteTime = timestampSpan.textContent.trim();
 
+        console.log('INSIDE',  noteTime); 
+        console.log('INSIDE',  secondsToMinutesAndSeconds(CurrentTime));   
+  
 
-    notes.forEach((note) => {
+        if(noteTime == secondsToMinutesAndSeconds(CurrentTime))
+        {
+            // const noteClass = noteElement.querySelector('.note');
 
+            // timestampSpan.classList.remove("note");
+            noteElement.classList.add("animate");
+            console.log('INSIDE INSDDDIIEI',  noteTime); 
 
-        if(note.time == currentTime){
-    
-            Child.classList.add("highlight");
-    
         }
-        else{
-    
-            Child.classList.remove("highlight"); 
+        else if(noteTime != secondsToMinutesAndSeconds(CurrentTime))
+        {
+            noteElement.classList.remove("animate");
         }
-    
-        
-        });
 
-    }, 100)
+    });
 
 }
+
+    function logMessage() {
+
+        console.log("Executing this message every 2 seconds");
+        trackVideoTime();
+    }
+    
+    // Set up the interval (every 2000 milliseconds or 2 seconds)
+    var intervalID = setInterval(logMessage, 1000);
 
 // Function to generate a shareable link
 function shareVideo() {
@@ -318,10 +325,6 @@ function closeModal() {
     const modal = document.getElementById('shareModal');
     modal.style.display = 'none';
 }
-
-
-
-
 
 
 // Function to get notes for a specific video ID
