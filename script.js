@@ -1,17 +1,18 @@
+// API key here
+const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug';
 
-//api key here
-const apiKey = 'AIzaSyARBhDYIuCIFzuhotN3xXH4YV1s8QchKv8';
+// Checks to see if a video has already been loaded
+let iframeActive = 0;
+let player; // Declare player variable
 
-//checks to see if a video has already been loaded
-iframe_active = 0;
-
-// Function to fetch YouTube video data
+// Function to fetch YouTube video data with a maximum duration of 30 minutes
 function fetchYouTubeVideos(query) {
-    const maxResults = 12;
+    const maxResults = 13;
+
+    // Specify the video duration in seconds (30 minutes = 1800 seconds)
+    const maxVideoDurationSeconds = 1800;
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}`;
-
-    // var player;
 
     fetch(apiUrl)
         .then(response => response.json())
@@ -19,62 +20,110 @@ function fetchYouTubeVideos(query) {
             const videoList = document.getElementById('video-list');
             videoList.innerHTML = ''; // Clear the existing video list
 
-            data.items.forEach(item => {
+            let videosProcessed = 0;
 
+            data.items.forEach(item => {
                 const videoID = item.id.videoId;
                 const title = item.snippet.title;
                 const thumbnailUrl = item.snippet.thumbnails.default.url;
 
-                // console.log("video id:" + videoID + "video title:" + title);
+                // Fetch video details including duration
+                fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoID}&part=contentDetails&key=${apiKey}`)
+                    .then(response => response.json())
+                    .then(videoData => {
+                        const duration = videoData.items[0].contentDetails.duration;
 
-                const videoThumbnail = document.createElement('div');
-                videoThumbnail.innerHTML = `
-                    <img src="${thumbnailUrl}" alt="${title}" onclick="loadVideo('${videoID}', '${title}')">
-                    <p>${title}</p>
-                `;
-                videoThumbnail.classList.add("video-box")
-                videoList.appendChild(videoThumbnail);
+                        // Check if the video duration is less than or equal to 30 minutes
+                        if (isDurationLessThan30Minutes(duration, maxVideoDurationSeconds)) {
+                            const videoThumbnail = document.createElement('div');
+                            videoThumbnail.innerHTML = `
+                                <img src="${thumbnailUrl}" alt="${title}" onclick="loadVideo('${videoID}', '${title}')">
+                                <p>${title}</p>
+                            `;
+                            videoThumbnail.classList.add("video-box");
+                            videoList.appendChild(videoThumbnail);
+                            videosProcessed++;
+
+                            // Check if we have processed exactly 12 videos
+                            if (videosProcessed === maxResults) {
+                                return; // Stop processing more videos
+                            }
+                        }
+                    })
+                    .catch(error => console.error(error));
             });
         })
         .catch(error => console.error(error));
 }
 
+// Function to check if the video duration is less than 30 minutes
+function isDurationLessThan30Minutes(duration, maxDurationSeconds) {
+    const durationRegex = /PT(\d+)M(\d+)S/;
+    const match = duration.match(durationRegex);
+
+    if (match) {
+        const minutes = parseInt(match[1]);
+        const seconds = parseInt(match[2]);
+        const totalSeconds = minutes * 60 + seconds;
+        return totalSeconds <= maxDurationSeconds;
+    }
+
+    return false;
+}
+
+// Function to check if the video duration is less than 15 minutes
+function isDurationLessThan15Minutes(duration, maxDurationSeconds) {
+    const durationRegex = /PT(\d+)M(\d+)S/;
+    const match = duration.match(durationRegex);
+
+    if (match) {
+        const minutes = parseInt(match[1]);
+        const seconds = parseInt(match[2]);
+        const totalSeconds = minutes * 60 + seconds;
+        return totalSeconds <= maxDurationSeconds;
+    }
+
+    return false;
+}
+
 // Function to load and play a video
 function loadVideo(videoID, title) {
-
     const videoPlayer = document.getElementById('video-title');
 
     videoPlayer.innerHTML = `<h2>${title}</h2>`;
 
-    //if a video has been loaded, update videoID
-    if(iframe_active){
-
+    // If a video has been loaded, update videoID
+    if (iframeActive) {
         clearNotes();
         player.loadVideoById(videoID);
         showNotes(videoID);
-    }
-    else{
-  
-        //create a new youtube player 
+    } else {
+        // Create a new YouTube player
         player = new YT.Player('video-player', {
             height: '260',
             width: '240',
             videoId: videoID,
             events: {
-              'onReady': onPlayerReady,
+                'onReady': onPlayerReady,
             }
-          });
-
+        });
     }
 
     showNotes(videoID);
 
-    }
+    // Update the URL without reloading the page
+    updateURL(videoID, title);
+}
 
 function onPlayerReady(event) {
+    iframeActive = 1; // Indicate that a video has been loaded
+}
 
-    iframe_active = 1; //indicate that a video has been loaded
-
+// Function to update the URL without reloading the page
+function updateURL(videoID, title) {
+    const newURL = `?v=${videoID}`;
+    window.history.pushState(null, null, newURL);
+    document.title = `${title} - Your Website`;
 }
 
 //*****KEYWORD SEARCH FUNCTIONS******
@@ -285,28 +334,31 @@ function shareVideo() {
     // Pause the video
     player.pauseVideo();
 
-    // Create a shareable link with video ID and notes
-    const shareableLink = `http://127.0.0.1:5500/UNM-SQA-2023-24/index.html?v=${videoID}&notes=${encodeURIComponent(JSON.stringify(notesForVideo))}`;
+    // Format notes for display in the modal
+    const formattedNotes = notesForVideo.map(note => `<li>${note.time} - ${note.description}</li>`).join('');
+
+    // Create a shareable link with video ID
+    const shareableLink = `https://youtu.be/${videoID}`;
 
     // Display the modal
     const modal = document.getElementById('shareModal');
     const modalText = document.getElementById('modalText');
 
-    // Update modal content with icons and links and css
+    // Update modal content with video link and notes
     modalText.innerHTML = `
-                <h3>Share Link: </h3>
-                <div style="word-wrap: break-word;">
-                    ${shareableLink}
-                </div>
-                <button onclick="copyToClipboard('${shareableLink}')" style="margin-top: 5px;">Copy Link</button>
-            </div>
-            <div style="display: flex; cursor: pointer;margin-top: 5px;justify-content: center">
+        <h3>Share Link: </h3>
+        <div style="word-wrap: break-word;">
+            ${shareableLink}
+        </div>
+        <button onclick="copyToClipboard('${shareableLink}')" style="margin-top: 5px;">Copy Link</button>
+        <h3>Video Notes: </h3>
+        <ul>${formattedNotes}</ul>
+        
+        <div style="display: flex; cursor: pointer; margin-top: 5px; justify-content: center">
             <h3>Share On: </h3>
             <i class="fab fa-facebook fa-3x" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareableLink)}', '_blank')"></i>
             <i class="fab fa-whatsapp fa-3x" onclick="window.open('https://api.whatsapp.com/send?text=${encodeURIComponent(shareableLink)}', '_blank')"></i>
             <i class="fas fa-envelope-open fa-3x" onclick="window.open('mailto:?body=${encodeURIComponent(shareableLink)}', '_blank')"></i>
-            </div>
-            </div>
         </div>
     `;
 
