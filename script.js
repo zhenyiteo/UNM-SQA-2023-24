@@ -4,6 +4,7 @@ const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug';
 // Checks to see if a video has already been loaded
 let iframeActive = 0;
 let player; // Declare player variable
+var addTime;
 
 // Function to fetch YouTube video data with a maximum duration of 30 minutes
 function fetchYouTubeVideos(query) {
@@ -106,7 +107,7 @@ function loadVideo(videoID, title) {
             events: {
                 'onReady': onPlayerReady,
             }
-        });
+          });         
     }
 
     showNotes(videoID);
@@ -171,8 +172,6 @@ document.getElementById('keyword-section').addEventListener('change', updateQuer
 // Fetch videos when the page loads
 fetchYouTubeVideos('Software Quality Assurance');
 
-// fetchYouTubeVideos();
-
 //*****NOTES FUNCTIONS******
 
 // Function to add notes
@@ -190,6 +189,7 @@ const notes = JSON.parse(localStorage.getItem("notes") || "[]");
 addNote.addEventListener("click", () => {
 
     popupNotes.classList.add("show");
+    addTime = player.getCurrentTime();
 
 });
 
@@ -199,6 +199,7 @@ closeContent.addEventListener("click", () => {
     popupNotes.classList.remove("show");
 
 });
+
 
 
 function showNotes(v){
@@ -213,12 +214,22 @@ function showNotes(v){
         {
             
         let liTag = `<li class="note">
+                        <div class="time">
+
                         <div class="timestamp">
-                            <span>${note.time}</span>
+                        <span>${note.added_time}</span>
                         </div>
+                         --
+                         <div class="timestamp2"> 
+                        <span>${note.time}</span>
+                        </div>
+                        
+                        </div>
+                       
                         <div class="content">
                             <span>${note.description}</span>
                         </div>
+
                      </li>`;
 
          addNote.insertAdjacentHTML("afterend", liTag);
@@ -238,13 +249,14 @@ saveBtn.addEventListener("click", e => {
     if(noteContent){
 
         //take time video 
-        var currentTime = player.getCurrentTime();
+        var savedTime = player.getCurrentTime();
         var noteID = player.getVideoData().video_id;
-        console.log("TIME NOTE WAS ADDED:" + secondsToMinutesAndSeconds(currentTime));
+        console.log("TIME NOTE WAS ADDED:" + secondsToMinutesAndSeconds(savedTime));
 
         let noteInfo ={
             description: noteContent,
-            time: secondsToMinutesAndSeconds(currentTime),
+            added_time: secondsToMinutesAndSeconds(addTime),
+            time: secondsToMinutesAndSeconds(savedTime),
             // time_css: currentTime,
             id: noteID
         }
@@ -264,10 +276,15 @@ function secondsToMinutesAndSeconds(seconds) {
 
     var minutes = Math.floor(seconds / 60);
     var remSec = seconds % 60;
+
+    if(remSec<10)
+    {
+        return "["+ minutes + ":0" + Math.round(remSec)+"]";
+
+    }
     return "["+ minutes + ":" + Math.round(remSec)+"]";
 
     //TODO:  make a '0' infront if the remaining seconds is <10
-
   }
   
   //function for removing all existing notes
@@ -278,7 +295,6 @@ function secondsToMinutesAndSeconds(seconds) {
         noteList.forEach((noteElement) => {
             noteElement.remove(); // Remove each note individually
           });
-
   }
 
 //IN PROGRESS
@@ -292,23 +308,22 @@ function trackVideoTime() {
     noteElements.forEach(function (noteElement) {
         // Set interval for each note element
 
-        const timestampSpan = noteElement.querySelector('.timestamp span');
-        const noteTime = timestampSpan.textContent.trim();
+        const timestampSpan1 = noteElement.querySelector('.timestamp span');
+        const timestampSpan2 = noteElement.querySelector('.timestamp2 span');
+        const timeNow =  secondsToMinutesAndSeconds(CurrentTime) 
 
-        console.log('INSIDE',  noteTime); 
-        console.log('INSIDE',  secondsToMinutesAndSeconds(CurrentTime));   
-  
+        const lb = timestampSpan1.textContent.trim();
+        const ub = timestampSpan2.textContent.trim();
 
-        if(noteTime == secondsToMinutesAndSeconds(CurrentTime))
+        // console.log('INSIDE',  noteTime); 
+        console.log('INSIDE',  timeNow);   
+
+        if(timeNow >= lb && timeNow <= ub)
         {
-            // const noteClass = noteElement.querySelector('.note');
-
-            // timestampSpan.classList.remove("note");
             noteElement.classList.add("animate");
-            console.log('INSIDE INSDDDIIEI',  noteTime); 
-
+            // console.log('INSIDE INSDDDIIEI',  noteTime); 
         }
-        else if(noteTime != secondsToMinutesAndSeconds(CurrentTime))
+        else
         {
             noteElement.classList.remove("animate");
         }
@@ -319,11 +334,11 @@ function trackVideoTime() {
 
     function logMessage() {
 
-        console.log("Executing this message every 2 seconds");
+        // console.log("Executing this message every 1 seconds");
         trackVideoTime();
     }
     
-    // Set up the interval (every 2000 milliseconds or 2 seconds)
+    // Set up the interval
     var intervalID = setInterval(logMessage, 1000);
 
 // Function to generate a shareable link
@@ -333,6 +348,7 @@ function shareVideo() {
 
     // Pause the video
     player.pauseVideo();
+
 
     // Format notes for display in the modal
     const formattedNotes = notesForVideo.map(note => `<li>${note.time} - ${note.description}</li>`).join('');

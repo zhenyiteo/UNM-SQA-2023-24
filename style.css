@@ -118,8 +118,6 @@ color: aqua;
     /* align-items: center;
     justify-content: center; */
     height: 200px;
-
-
 }
 
 
@@ -164,7 +162,7 @@ iframe {
 
 .note .content, .animate .content{ 
 
-    display: inline-block;
+    /* display: inline-block; */
     padding-bottom: 20px;
 
 }
@@ -174,11 +172,18 @@ iframe {
     margin-bottom: 20px;
 }
 
+.time{
+
+    display: flex;
+}
+
 .animate{
 
-    border-style: dotted;
+    background-color: white;
+}
 
-
+.note{
+    border-style: double;
 }
 
 /* the grey area */
@@ -257,9 +262,7 @@ iframe {
 
 
 .checkbox-item{
-
     padding-right: 30px;
-
 }
 
 #checkbox-list{
@@ -268,7 +271,6 @@ iframe {
     border: 20px;
     flex-wrap: nowrap;
     overflow-x: auto; /* Enable horizontal scrolling */
-
 }
 
 #checkbox-list{
@@ -277,9 +279,7 @@ iframe {
     border: 20px;
     flex-wrap: nowrap;
     overflow-x: auto; /* Enable horizontal scrolling */
-
 }
-
 
 
 .filtering-section{
