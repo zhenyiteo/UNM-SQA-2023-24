@@ -6,7 +6,6 @@ const apiKey = 'AIzaSyARBhDYIuCIFzuhotN3xXH4YV1s8QchKv8';
 iframe_active = 0;
 var addTime;
 
-
 // Function to fetch YouTube video data
 function fetchYouTubeVideos(query) {
     const maxResults = 12;
@@ -56,6 +55,9 @@ function loadVideo(videoID, title) {
         showNotes(videoID);
     }
     else{
+
+        // shareButton = document.querySelector("#shareButton");
+        // noteButton = document.querySelector(".add-notes");
   
         //create a new youtube player 
         player = new YT.Player('video-player', {
@@ -65,8 +67,7 @@ function loadVideo(videoID, title) {
             events: {
               'onReady': onPlayerReady,
             }
-          });
-
+          });         
     }
 
     showNotes(videoID);
@@ -151,6 +152,7 @@ closeContent.addEventListener("click", () => {
     popupNotes.classList.remove("show");
 
 });
+
 
 
 function showNotes(v){
