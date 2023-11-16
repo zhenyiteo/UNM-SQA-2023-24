@@ -229,6 +229,12 @@ function secondsToMinutesAndSeconds(seconds) {
 
     var minutes = Math.floor(seconds / 60);
     var remSec = seconds % 60;
+
+    if(remSec<10)
+    {
+        return "["+ minutes + ":0" + Math.round(remSec)+"]";
+
+    }
     return "["+ minutes + ":" + Math.round(remSec)+"]";
 
     //TODO:  make a '0' infront if the remaining seconds is <10
@@ -281,11 +287,11 @@ function trackVideoTime() {
 
     function logMessage() {
 
-        console.log("Executing this message every 2 seconds");
+        // console.log("Executing this message every 1 seconds");
         trackVideoTime();
     }
     
-    // Set up the interval (every 2000 milliseconds or 2 seconds)
+    // Set up the interval
     var intervalID = setInterval(logMessage, 1000);
 
 // Function to generate a shareable link
@@ -297,7 +303,8 @@ function shareVideo() {
     player.pauseVideo();
 
     // Create a shareable link with video ID and notes
-    const shareableLink = `http://127.0.0.1:5500/UNM-SQA-2023-24/index.html?v=${videoID}&notes=${encodeURIComponent(JSON.stringify(notesForVideo))}`;
+    const shareableLink = `https://youtu.be/${videoID}`;
+
 
     // Display the modal
     const modal = document.getElementById('shareModal');
@@ -309,6 +316,8 @@ function shareVideo() {
                 <div style="word-wrap: break-word;">
                     ${shareableLink}
                 </div>
+
+
                 <button onclick="copyToClipboard('${shareableLink}')" style="margin-top: 5px;">Copy Link</button>
             </div>
             <div style="display: flex; cursor: pointer;margin-top: 5px;justify-content: center">
