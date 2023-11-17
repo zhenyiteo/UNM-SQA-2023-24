@@ -1,54 +1,55 @@
-// API key here
-const apiKey = 'AIzaSyBF11-Jj-AixsdM8bPsj5JK8MqSy9hIyug';
+//call api key
+const apiKey = 'AIzaSyD-0u0wS29Vf7TrQFXQcEwSDDo94X9XoLM';
 
 // Checks to see if a video has already been loaded
 let iframeActive = 0;
 let player; // Declare player variable
 var addTime;
 
-// Function to fetch YouTube video data with a maximum duration of 30 minutes
-function fetchYouTubeVideos(query) {
-    const maxResults = 13;
+// Pagination variables
+let currentPage = 1;
+const videosToFetch = 50; // Change this to the number of videos you want to fetch from the API
+const videosToDisplay = 12; // Change this to the number of videos you want to display
 
-    // Specify the video duration in seconds (30 minutes = 1800 seconds)
-    const maxVideoDurationSeconds = 1800;
+function fetchYouTubeVideos(query, pageToken = null) {
+    const maxResults = videosToFetch;
+    const maxVideoDurationSeconds = 600;
 
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}`;
-
+    let apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${query}&part=snippet&type=video&maxResults=${maxResults}&pageToken=${pageToken || ''}`;
+    
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const videoList = document.getElementById('video-list');
             videoList.innerHTML = ''; // Clear the existing video list
 
-            let videosProcessed = 0;
+            const videosToDisplayList = [];
 
             data.items.forEach(item => {
                 const videoID = item.id.videoId;
                 const title = item.snippet.title;
                 const thumbnailUrl = item.snippet.thumbnails.default.url;
-
-                // Fetch video details including duration
+            
                 fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoID}&part=contentDetails&key=${apiKey}`)
                     .then(response => response.json())
                     .then(videoData => {
                         const duration = videoData.items[0].contentDetails.duration;
-
-                        // Check if the video duration is less than or equal to 30 minutes
-                        if (isDurationLessThan30Minutes(duration, maxVideoDurationSeconds)) {
+            
+                        if (isDurationLessThan10Minutes(duration, maxVideoDurationSeconds)) {
                             const videoThumbnail = document.createElement('div');
                             videoThumbnail.innerHTML = `
                                 <img src="${thumbnailUrl}" alt="${title}" onclick="loadVideo('${videoID}', '${title}')">
                                 <p>${title}</p>
                             `;
                             videoThumbnail.classList.add("video-box");
-                            videoList.appendChild(videoThumbnail);
-                            videosProcessed++;
+                            videosToDisplayList.push(videoThumbnail);
+                        }
 
-                            // Check if we have processed exactly 12 videos
-                            if (videosProcessed === maxResults) {
-                                return; // Stop processing more videos
-                            }
+                        if (videosToDisplayList.length === videosToDisplay) {
+                            // If we have enough videos to display, stop processing and append to the video list
+                            videosToDisplayList.forEach(video => {
+                                videoList.appendChild(video);
+                            });
                         }
                     })
                     .catch(error => console.error(error));
@@ -58,7 +59,7 @@ function fetchYouTubeVideos(query) {
 }
 
 // Function to check if the video duration is less than 30 minutes
-function isDurationLessThan30Minutes(duration, maxDurationSeconds) {
+function isDurationLessThan10Minutes(duration, maxDurationSeconds) {
     const durationRegex = /PT(\d+)M(\d+)S/;
     const match = duration.match(durationRegex);
 
@@ -72,20 +73,8 @@ function isDurationLessThan30Minutes(duration, maxDurationSeconds) {
     return false;
 }
 
-// Function to check if the video duration is less than 15 minutes
-function isDurationLessThan15Minutes(duration, maxDurationSeconds) {
-    const durationRegex = /PT(\d+)M(\d+)S/;
-    const match = duration.match(durationRegex);
 
-    if (match) {
-        const minutes = parseInt(match[1]);
-        const seconds = parseInt(match[2]);
-        const totalSeconds = minutes * 60 + seconds;
-        return totalSeconds <= maxDurationSeconds;
-    }
 
-    return false;
-}
 
 // Function to load and play a video
 function loadVideo(videoID, title) {
