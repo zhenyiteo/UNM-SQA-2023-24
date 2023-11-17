@@ -8,8 +8,8 @@ var addTime;
 
 // Pagination variables
 let currentPage = 1;
-const videosToFetch = 50; // Change this to the number of videos you want to fetch from the API
-const videosToDisplay = 12; // Change this to the number of videos you want to display
+const videosToFetch = 50; // number of videos fetch from the API
+const videosToDisplay = 12; 
 
 function fetchYouTubeVideos(query, pageToken = null) {
     const maxResults = videosToFetch;
@@ -58,7 +58,7 @@ function fetchYouTubeVideos(query, pageToken = null) {
         .catch(error => console.error(error));
 }
 
-// Function to check if the video duration is less than 30 minutes
+// Function to check if the video duration is less than 10 minutes
 function isDurationLessThan10Minutes(duration, maxDurationSeconds) {
     const durationRegex = /PT(\d+)M(\d+)S/;
     const match = duration.match(durationRegex);
