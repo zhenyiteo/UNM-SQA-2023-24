@@ -340,7 +340,12 @@ function shareVideo() {
 
 
     // Format notes for display in the modal
-    const formattedNotes = notesForVideo.map(note => `<li>${note.time} - ${note.description}</li>`).join('');
+    const formattedNotes = notesForVideo.map(note => {
+        const startTime = note.added_time;
+        const endTime = note.time;
+        const timeRange = `${startTime} - ${endTime}`;
+        return `<li>${timeRange} - ${note.description}</li>`;
+    }).join('');
 
     // Create a shareable link with video ID
     const shareableLink = `https://youtu.be/${videoID}`;
